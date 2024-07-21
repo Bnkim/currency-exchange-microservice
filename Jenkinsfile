@@ -1,5 +1,6 @@
 pipeline {
-	agent { docker { image 'maven:3.6.3'} }
+	//agent { docker { image 'maven:3.6.3'} }
+	agent any
 	stages{
 		stage('Build') {
 			steps {
@@ -14,7 +15,7 @@ pipeline {
 		}
 		stage('Test') {
 			steps {
-					echo "Test"
+					sh "mvn test"
 				}			
 			}	
 		stage('Integration Test') {
