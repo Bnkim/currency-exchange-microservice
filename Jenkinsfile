@@ -1,6 +1,6 @@
 pipeline {
-	agent { docker { image 'maven:3.6.3'} }
-	//agent any
+	//agent { docker { image 'maven:3.6.3'} }
+	agent any
 
 	environment {
 		dockerHome = tool 'myDocker'
@@ -22,20 +22,22 @@ pipeline {
 		}
 		stage('Test') {
 			steps {
-					sh "mvn test"
-				}			
-			}	
+				sh "mvn test"
+			}			
+		}	
 		stage('Integration Test') {
 			steps {
-					sh "mvn failsafe:integration-test failsafe:verify"
-				}
+				sh "mvn failsafe:integration-test failsafe:verify"
 			}
+		}
 
 		stage('Package') {
 			steps {
-					sh "mvn package -DskipTests"
-				}
+				script{
+					sh "mvn clean package -DskipTests"
+				}					
 			}
+		}
 
 		stage('Build Docker Image'){
 				steps{
@@ -56,5 +58,5 @@ pipeline {
 					}
 				}
 			}
+		}
 	}
-}
